@@ -174,15 +174,61 @@ map.on('click', () => {
 });
 
 // --- UPDATED LOCATE ME LOGIC ---
+// --- UPDATED LOCATE ME LOGIC (With Loading Spinner) ---
 const userMarkerGroup = L.layerGroup().addTo(map);
 
-document.getElementById('btn-locate').addEventListener('click', () => {
+const btnLocate = document.getElementById('btn-locate');
+const iconArrow = document.getElementById('icon-arrow');
+const iconLoading = document.getElementById('icon-loading');
+
+btnLocate.addEventListener('click', () => {
+    // 1. Show Loading State
+    iconArrow.classList.add('hidden');
+    iconLoading.classList.remove('hidden');
+
+    // 2. Start Search
     map.locate({
         setView: true, 
         maxZoom: 16, 
         enableHighAccuracy: true, 
         timeout: 10000 
     });
+});
+
+map.on('locationfound', (e) => {
+    // 3. Stop Loading State
+    iconArrow.classList.remove('hidden');
+    iconLoading.classList.add('hidden');
+
+    userMarkerGroup.clearLayers();
+
+    // Draw Dot
+    L.marker(e.latlng, {
+        icon: L.divIcon({ 
+            className: 'user-location-dot', 
+            iconSize: [20, 20], 
+            html: '<div style="width:100%;height:100%;background:#4285F4;border:3px solid white;border-radius:50%;box-shadow:0 0 8px rgba(0,0,0,0.4);"></div>'
+        }) 
+    }).addTo(userMarkerGroup);
+
+    // Draw Circle (only if accurate)
+    if (e.accuracy < 1000) {
+        L.circle(e.latlng, {
+            radius: e.accuracy / 2,
+            color: '#4285F4', 
+            fillColor: '#4285F4', 
+            fillOpacity: 0.15, 
+            weight: 1
+        }).addTo(userMarkerGroup);
+    }
+});
+
+map.on('locationerror', (e) => {
+    // 4. Stop Loading (Even if it fails)
+    iconArrow.classList.remove('hidden');
+    iconLoading.classList.add('hidden');
+    
+    alert("Could not access location. Ensure GPS is on.");
 });
 
 map.on('locationfound', (e) => {
