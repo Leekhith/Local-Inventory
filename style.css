@@ -130,3 +130,21 @@ body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f5f
 }
 .sidebar-menu li a:active { background: #eee; }
 .sidebar-menu .icon { margin-right: 12px; font-size: 18px; }
+
+/* --- LOADING SPINNER STYLES --- */
+
+/* Helper class to hide icons */
+.hidden {
+    display: none !important;
+}
+
+/* The Spinner Animation */
+#icon-loading {
+    animation: spin 1s linear infinite; /* Spin forever while visible */
+    color: #4285F4; /* Google Blue color */
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
