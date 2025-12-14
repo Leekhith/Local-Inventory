@@ -235,3 +235,34 @@ function closeBottomSheetUI() {
 }
 
 loadShops();
+
+// --- SIDEBAR LOGIC ---
+
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+// Open Menu
+menuBtn.addEventListener('click', () => {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+});
+
+// Close Menu (Clicking Overlay)
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Close Menu (Swiping Left - Optional Touch Feature)
+let sidebarTouchStart = 0;
+sidebar.addEventListener('touchstart', e => {
+    sidebarTouchStart = e.changedTouches[0].screenX;
+});
+sidebar.addEventListener('touchend', e => {
+    const sidebarTouchEnd = e.changedTouches[0].screenX;
+    if (sidebarTouchStart - sidebarTouchEnd > 50) { // Swiped Left
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+});
