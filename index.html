@@ -2,21 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Nearby Prices</title>
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
+    <div id="sidebar-overlay"></div> <div id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" onclick="alert('Feature coming soon: Find Rented House')">
+                    <span class="icon">🏠</span> Find Rented House
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="alert('Feature coming soon: Make a List')">
+                    <span class="icon">📝</span> Make a List of Products
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <div class="search-container">
         <div class="search-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <div id="menu-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </div>
             <input type="text" id="search-input" placeholder="Search (e.g. Milk)...">
         </div>
     </div>
@@ -24,15 +41,14 @@
     <div id="map"></div>
 
     <button id="btn-locate" class="locate-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 19 21 12 17 5 21 12 2"></polygon></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 19 21 12 17 5 21 12 2"></polygon></svg>
     </button>
 
-  <div id="bottom-sheet">
+    <div id="bottom-sheet">
         <div class="sheet-content">
             <div class="image-container">
                 <img id="sheet-image" src="" alt="Product" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1170/1170679.png'">
             </div>
-
             <div class="text-details">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
@@ -41,7 +57,6 @@
                     </div>
                     <div class="price-tag" id="sheet-price">...</div>
                 </div>
-
                 <a href="#" id="btn-navigate" class="btn-directions" target="_blank">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 19 21 12 17 5 21 12 2"></polygon></svg>
                     Directions
@@ -50,6 +65,6 @@
         </div>
     </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
