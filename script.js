@@ -3,12 +3,22 @@ const supabaseUrl = 'https://oppzpgjddbjfazlrrhhk.supabase.co';
 const supabaseKey = 'sb_publishable_h5c3L-Q8c4_2Vau1wyRpyQ_IvBHcpgv';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// 1. Initialize Map
-const map = L.map('map', { zoomControl: false }).setView([17.4455, 78.3646], 14);
-L.control.zoom({ position: 'bottomleft' }).addTo(map);
+// --- MAP INITIALIZATION ---
+// We disable the default zoom control so we can add a new one in the Top Right
+const map = L.map('map', {
+    zoomControl: false 
+}).setView([17.3850, 78.4867], 13);
 
+// Add Zoom Control to TOP RIGHT
+L.control.zoom({
+    position: 'topright'
+}).addTo(map);
+
+// Add the tile layer (Keep your existing tile layer code below this)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap & CARTO', subdomains: 'abcd', maxZoom: 20
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
 }).addTo(map);
 
 // 2. State Variables
