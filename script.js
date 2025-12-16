@@ -10,9 +10,7 @@ const map = L.map('map', {
 }).setView([17.3850, 78.4867], 13);
 
 // Add Zoom Control to TOP RIGHT
-L.control.zoom({
-    position: 'topright'
-}).addTo(map);
+
 
 // Add the tile layer (Keep your existing tile layer code below this)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
