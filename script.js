@@ -19,33 +19,33 @@ function triggerSearch(term) {
     performSearch();
 }
 
-// 4. MAIN SEARCH FUNCTION
+// --- UPDATED DATA & SEARCH LOGIC ---
+
 async function performSearch() {
     const btnSearchArea = document.getElementById('btn-search-area');
     const toast = document.getElementById('toast-msg');
     
-    // Hide "Search Area" button while searching
     btnSearchArea.classList.add('hidden');
     
-    // Clear existing markers
+    // Clear Markers
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
-    // Get Map Center & Bounds
     const center = map.getCenter();
-    // Simulate API delay
-    // In real app: fetch from Supabase using center.lat, center.lng
-    
-    // --- SIMULATED DATA (Replace with Supabase later) ---
-    // We filter based on currentSearchTerm
+
+    // --- SIMULATED DATABASE (Updated for your request) ---
     const allData = [
-        { name: "Luxury Apt", type: "1BHK", lat: center.lat + 0.002, lng: center.lng + 0.002, price: 15000 },
-        { name: "Cozy Studio", type: "1BHK", lat: center.lat - 0.003, lng: center.lng - 0.002, price: 12000 },
-        { name: "Family Villa", type: "Villa", lat: center.lat + 0.005, lng: center.lng - 0.005, price: 45000 },
-        { name: "Daily Needs", type: "all", lat: center.lat + 0.001, lng: center.lng + 0.001, price: 50 },
+        // 1 BHK
+        { name: "Sunny Apartment", type: "1BHK", lat: center.lat + 0.002, lng: center.lng + 0.002, price: 12000, img: "https://cdn-icons-png.flaticon.com/512/609/609803.png" },
+        // 2 BHK
+        { name: "Royal Residency", type: "2BHK", lat: center.lat - 0.003, lng: center.lng - 0.002, price: 25000, img: "https://cdn-icons-png.flaticon.com/512/609/609803.png" },
+        // Chicken
+        { name: "Fresh Farms Chicken", type: "Chicken", lat: center.lat + 0.001, lng: center.lng - 0.003, price: 240, img: "https://cdn-icons-png.flaticon.com/512/1046/1046751.png" },
+        // Grocery
+        { name: "Best Price Wholesale", type: "Grocery", lat: center.lat - 0.001, lng: center.lng + 0.004, price: "Wholesale", img: "https://cdn-icons-png.flaticon.com/512/3724/3724720.png" },
     ];
 
-    // Filter logic
+    // Filter Logic
     let results = [];
     if (currentSearchTerm === 'all') {
         results = allData;
@@ -53,7 +53,6 @@ async function performSearch() {
         results = allData.filter(item => item.type === currentSearchTerm);
     }
 
-    // --- HANDLE "NO RESULTS" ---
     if (results.length === 0) {
         toast.innerText = `No ${currentSearchTerm} found nearby!`;
         toast.classList.remove('hidden');
@@ -61,16 +60,15 @@ async function performSearch() {
         return; 
     }
 
-    // --- RENDER MARKERS ---
     results.forEach(shop => {
         const marker = L.marker([shop.lat, shop.lng]).addTo(map);
         
-        // Tooltip (Price Tag)
-        marker.bindTooltip(`₹${shop.price}`, {
+        // Show Price on Map
+        let label = typeof shop.price === 'number' ? `₹${shop.price}` : shop.price;
+        marker.bindTooltip(label, {
             permanent: true, direction: 'bottom', className: 'price-label'
         });
 
-        // Click Event (Open Bottom Sheet)
         marker.on('click', () => {
              updateSheetContent(shop);
              document.getElementById('bottom-sheet').classList.add('active');
@@ -79,6 +77,21 @@ async function performSearch() {
     });
 }
 
+// ... Keep the Sidebar Logic (menuBtn listener) from previous steps ...
+// If you lost the sidebar logic, add this back to the bottom:
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+menuBtn.addEventListener('click', () => {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+});
+
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+});
 // 5. "SEARCH THIS AREA" LOGIC
 map.on('moveend', () => {
     // Only show button if we have searched for something previously
