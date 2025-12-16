@@ -312,3 +312,42 @@ sidebar.addEventListener('touchend', e => {
         overlay.classList.remove('active');
     }
 });
+
+// --- NESTED MENU LOGIC ---
+
+const menuMain = document.getElementById('menu-main');
+const menuRentals = document.getElementById('menu-rentals');
+const btnOpenRentals = document.getElementById('btn-open-rentals');
+const btnBackMenu = document.getElementById('btn-back-menu');
+
+// 1. Go to Rental Menu
+btnOpenRentals.addEventListener('click', (e) => {
+    e.preventDefault(); // Stop page reload
+    menuMain.style.display = 'none';
+    menuRentals.style.display = 'block';
+});
+
+// 2. Go Back to Main Menu
+btnBackMenu.addEventListener('click', () => {
+    menuMain.style.display = 'block';
+    menuRentals.style.display = 'none';
+});
+
+// 3. Handle Rental Selection (1BHK, 2BHK, etc.)
+function loadRealEstate(type) {
+    // A. Close the sidebar so the user can see the map
+    document.getElementById('sidebar').classList.remove('active');
+    document.getElementById('sidebar-overlay').classList.remove('active');
+    
+    // B. Reset the menu for next time
+    setTimeout(() => {
+        menuMain.style.display = 'block';
+        menuRentals.style.display = 'none';
+    }, 300);
+
+    // C. Logic to Filter/Show Map Points (Placeholder)
+    alert(`Loading map for: ${type}... \n(You will connect this to your database later)`);
+    
+    // Example: You could call a function here like:
+    // fetchAndShowMarkers(type); 
+}
