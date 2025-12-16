@@ -1,150 +1,108 @@
-body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f5f5f5; }
-#map { height: 100vh; width: 100%; z-index: 1; }
+/* RESET */
+body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
 
-/* Search Bar */
-.search-container { position: absolute; top: 20px; left: 20px; right: 20px; z-index: 1000; }
-.search-box { background: white; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-#search-input { border: none; outline: none; font-size: 16px; margin-left: 10px; width: 100%; font-family: inherit; }
-
-/* Markers */
-.price-marker { background: white; border-radius: 20px; font-weight: 700; font-size: 14px; color: #222; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 6px 12px; white-space: nowrap; transition: transform 0.2s; display: flex; justify-content: center; align-items: center; width: auto !important; }
-.price-marker.active-marker { background: #222; color: white; transform: scale(1.1); z-index: 1000 !important; }
-.price-marker::after { content: ''; position: absolute; bottom: -6px; left: 50%; margin-left: -6px; border-width: 6px 6px 0; border-style: solid; border-color: white transparent transparent transparent; }
-.price-marker.active-marker::after { border-color: #222 transparent transparent transparent; }
-
-/* Locate Button (Moved up slightly) */
-.leaflet-left .leaflet-control { margin-bottom: 150px; margin-left: 15px; } /* Moves Zoom buttons up */
-.locate-btn { position: absolute; bottom: 150px; right: 15px; z-index: 500; background: white; border: none; border-radius: 50%; width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; display: flex; justify-content: center; align-items: center; color: #333; }
-
-/* --- NEW FLOATING BOTTOM SHEET --- */
-#bottom-sheet {
-    position: fixed;
-    bottom: 20px;
-    left: 15px;
-    right: 15px;
-    width: auto;
+/* 1. HEADER STYLES (OYO Look) */
+#app-header {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding-bottom: 10px;
     z-index: 1000;
-    transform: translateY(150%); /* Initially hidden down */
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth snap */
+    position: relative;
 }
 
-#bottom-sheet.active {
-    transform: translateY(0);
+.top-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px;
 }
+.logo { font-size: 20px; font-weight: 900; color: #d32f2f; letter-spacing: -0.5px; } /* OYO Red-ish */
+.icon-btn { cursor: pointer; }
 
-/* --- THE GHOST CARD (For Animation) --- */
-.ghost-sheet {
-    position: fixed;
-    bottom: 20px;
-    left: 15px;
-    right: 15px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-    z-index: 999; /* Just below the real sheet */
-    pointer-events: none; /* User can't click it */
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-/* Inner Layout */
-.sheet-content { display: flex; align-items: center; padding: 12px; gap: 15px; }
-.image-container { width: 80px; height: 80px; flex-shrink: 0; background-color: #eee; border-radius: 16px; overflow: hidden; margin: 0; }
-.text-details { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-.shop-title { font-size: 16px; font-weight: 800; margin: 0 0 2px 0; color: #111; line-height: 1.2; }
-.product-info { color: #666; font-size: 13px; margin-bottom: 4px; }
-.price-tag { font-size: 18px; font-weight: 900; color: #e53935; }
-
-.btn-directions {
-    padding: 8px 16px; background-color: #f0f0f0; color: #111; text-decoration: none; border-radius: 20px; font-weight: 600; font-size: 12px; display: inline-flex; align-items: center; align-self: flex-start; margin-top: 5px;
-}
-.btn-directions svg { margin-right: 4px; }
-
-/* --- MENU BUTTON & SIDEBAR STYLES --- */
-
-/* 1. Menu Button inside Search Bar */
-#menu-btn {
-    padding-right: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    border-right: 1px solid #eee; /* Divider line */
-    margin-right: 10px;
-}
-
-/* 2. Dark Overlay (Backdrop) */
-#sidebar-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); /* Semi-transparent black */
-    z-index: 1999; /* Below sidebar, above map */
-    display: none; /* Hidden by default */
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-#sidebar-overlay.active {
-    display: block;
-    opacity: 1;
-}
-
-/* 3. The Sidebar */
-#sidebar {
-    position: fixed;
-    top: 0; left: -280px; /* Hidden off-screen to the left */
-    width: 260px;
-    height: 100%;
-    background: white;
-    z-index: 2000; /* Highest priority */
-    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-}
-
-#sidebar.active {
-    left: 0; /* Slide in */
-}
-
-/* Sidebar Content */
-.sidebar-header {
-    padding: 25px 20px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #eee;
-}
-.sidebar-header h3 { margin: 0; font-size: 20px; font-weight: 800; color: #333; }
-
-.sidebar-menu { list-style: none; padding: 0; margin: 0; }
-.sidebar-menu li a {
+/* Search Box inside Header */
+.search-container-header { padding: 0 20px 10px 20px; }
+.search-box-dummy {
+    background: #f1f1f1;
+    border-radius: 25px;
+    padding: 10px 15px;
     display: flex; align-items: center;
-    padding: 16px 20px;
-    text-decoration: none;
-    color: #333;
-    font-size: 15px;
-    font-weight: 500;
-    border-bottom: 1px solid #f5f5f5;
-    transition: background 0.2s;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
-.sidebar-menu li a:active { background: #eee; }
-.sidebar-menu .icon { margin-right: 12px; font-size: 18px; }
-
-/* --- LOADING SPINNER STYLES --- */
-
-/* Helper class to hide icons */
-.hidden {
-    display: none !important;
+.search-box-dummy input {
+    border: none; background: transparent; width: 100%; outline: none;
+    margin-left: 10px; font-size: 15px; color: #333;
 }
 
-/* The Spinner Animation */
-#icon-loading {
-    animation: spin 1s linear infinite; /* Spin forever while visible */
-    color: #4285F4; /* Google Blue color */
+/* Category Slider (Horizontal Scroll) */
+.category-slider {
+    display: flex; overflow-x: auto; padding: 5px 15px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+.category-slider::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+.cat-item {
+    flex: 0 0 auto; margin-right: 20px; text-align: center;
+    cursor: pointer; opacity: 0.6; transition: 0.2s;
+}
+.cat-item.active { opacity: 1; font-weight: bold; }
+
+.cat-icon, .cat-img {
+    width: 50px; height: 50px; border-radius: 50%;
+    margin: 0 auto 5px auto; display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.cat-icon { background: #333; } /* "Nearby" black circle */
+.cat-img img { width: 100%; height: 100%; object-fit: cover; }
+.cat-item span { font-size: 12px; color: #333; }
+
+/* 2. MAP CONTAINER (Calculated Height) */
+#map-wrapper {
+    position: relative;
+    height: calc(100vh - 180px); /* Fill remaining space below header */
+    width: 100%;
+}
+#map { width: 100%; height: 100%; }
+
+/* 3. FLOATING BUTTONS */
+/* Search This Area Pill */
+.floating-pill {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    background: white; border: none; padding: 10px 20px;
+    border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-weight: 600; color: #4285F4; z-index: 999; cursor: pointer;
+    font-size: 14px;
 }
 
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+/* Locate Button (Bottom Right) */
+.locate-btn {
+    position: absolute; bottom: 30px; right: 20px; /* Moved to bottom right */
+    background: white; border: none; width: 50px; height: 50px;
+    border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; cursor: pointer;
+}
+
+/* Toast Message */
+#toast-msg {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8); color: white; padding: 12px 24px;
+    border-radius: 8px; font-size: 14px; z-index: 1000; pointer-events: none;
+}
+.hidden { display: none !important; }
+
+/* Bottom Sheet Styles (Keep your existing ones) */
+#bottom-sheet {
+    position: fixed; bottom: -100%; left: 0; width: 100%;
+    background: white; border-radius: 20px 20px 0 0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+    transition: bottom 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
+    z-index: 2000;
+}
+#bottom-sheet.active { bottom: 0; }
+.sheet-content { padding: 20px; }
+.image-container img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
+.text-details { margin-top: 15px; }
+.shop-title { margin: 0; font-size: 18px; }
+.price-tag { background: #e8f5e9; color: #2e7d32; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
+.btn-directions {
+    display: block; margin-top: 15px; background: #4285F4; color: white;
+    text-align: center; padding: 12px; border-radius: 8px; text-decoration: none;
 }
