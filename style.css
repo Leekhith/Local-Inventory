@@ -106,3 +106,41 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-
     display: block; margin-top: 15px; background: #4285F4; color: white;
     text-align: center; padding: 12px; border-radius: 8px; text-decoration: none;
 }
+
+/* Ensure Sidebar works */
+#sidebar {
+    position: fixed; top: 0; left: -280px; width: 260px; height: 100%;
+    background: white; z-index: 2000;
+    transition: left 0.3s ease; box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+}
+#sidebar.active { left: 0; }
+
+/* FIX: Locate Button - Use 'fixed' so it never scrolls away */
+.locate-btn {
+    position: fixed; /* Changed from absolute */
+    bottom: 30px; 
+    right: 20px;
+    background: white; 
+    width: 50px; height: 50px;
+    border-radius: 50%; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1500; /* Higher than map (1000), lower than bottom sheet (2000) */
+    cursor: pointer;
+    border: none;
+}
+
+/* Sidebar Menu Tweaks */
+.sidebar-menu { list-style: none; padding: 0; margin: 0; }
+.sidebar-menu li a {
+    display: flex; align-items: center; padding: 16px 20px;
+    text-decoration: none; color: #333; border-bottom: 1px solid #f5f5f5;
+}
+.sidebar-menu .icon { margin-right: 15px; font-size: 18px; width: 25px; text-align: center; }
+
+/* Existing Map Wrapper Height */
+#map-wrapper {
+    position: relative;
+    height: calc(100vh - 180px);
+    width: 100%;
+}
